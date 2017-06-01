@@ -40,6 +40,15 @@ public class Main {
      
      
     public static void main(String[] args) throws Exception {
+		
+		 //Scanner s=new Scanner(System.in);
+      	//Scanner in = new Scanner (new File ("in.txt"));
+                //Scanner in = new Scanner (System.in);
+                         
+            //BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+           // BufferedReader br = new BufferedReader(new FileReader("in.txt"));
+          //StringTokenizer st = new StringTokenizer(br.readLine());
+       //Scanner s = new Scanner (new File ("in.txt"));
         //br = new BufferedReader(new InputStreamReader(System.in));
          in = new Scanner (new FileReader("in.txt"));
               //StringTokenizer st=new StringTokenizer(br.readLine());
