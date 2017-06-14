@@ -1,136 +1,50 @@
-// Solution for: uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=512
-
+// Solution for: uva.onlinejudge.org/index.php?option=onlinejudge&page=show_problem&problem=380
+ 
 import java.util.*;
 import java.lang.*;
 import java.io.*;
-
+ 
 public class Main
 {
-	static int n,A,B;
-	static int BFS(){
-		if(n==0)
-			return 0;
-		int[][] cost=new int[A+1][B+1];
-		int[][] parentA=new int[A+1][B+1];
-		int[][] parentB=new int[A+1][B+1];
-		String[][] parentMove=new String[A+1][B+1];
-		for(int i=0;i<=A;++i)
-			for(int j=0;j<=B;++j)
+	static int[] dr={-2,-2,-1,1,2,2,1,-1};
+	static int[] dc={-1,1,2,2,1,-1,-2,-2};
+	static int BFS(int sr,int sc,int tr,int tc){
+		int[][] cost=new int[8][8];
+		for(int i=0;i<8;++i)
+			for(int j=0;j<8;++j)
 				cost[i][j]=-1;
-		cost[0][0]=0;
+		cost[sr][sc]=0;
 		Queue<Integer> q=new LinkedList<Integer>();
-		q.add(0);
-		q.add(0);
-		int na,nb;
+		q.add(sr);
+		q.add(sc);
 		while(q.size()>0){
-			int a=q.poll();
-			int b=q.poll();
-			if(b==n){
-				int curA=a,curB=b;
-				ArrayList<String> sol=new ArrayList<String>();
-				while(curA!=0 || curB!=0){
-					int nextA=parentA[curA][curB];
-					int nextB=parentB[curA][curB];
-					sol.add(parentMove[curA][curB]);
-					curA=nextA;
-					curB=nextB;
-				}
-				for(int i=sol.size()-1;i>=0;--i)
-					System.out.println(sol.get(i));
-				System.out.println("success");
-				return cost[a][b];
-			}
-			if(a>0){
-				na=0;
-				nb=b;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="empty A";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
-			}
-			if(b>0){
-				na=a;
-				nb=0;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="empty B";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
-			}
-			if(a!=A){
-				na=A;
-				nb=b;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="fill A";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
-			}
-			if(b!=B){
-				na=a;
-				nb=B;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="fill B";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
-			}
-			if(a>0){
-				int move=Math.min(a,B-b);
-				na=a-move;
-				nb=b+move;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="pour A B";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
-			}
-			if(b>0){
-				int move=Math.min(b,A-a);
-				na=a+move;
-				nb=b-move;
-				if(cost[na][nb]==-1){
-					parentA[na][nb]=a;
-					parentB[na][nb]=b;
-					parentMove[na][nb]="pour B A";
-					
-					cost[na][nb]=cost[a][b]+1;
-					q.add(na);
-					q.add(nb);
-				}
+			int r=q.poll();
+			int c=q.poll();
+			for(int d=0;d<8;++d){
+				int nr=r+dr[d];
+				int nc=c+dc[d];
+				if(nr<0 || nc<0 || nr>=8 || nc>=8 || cost[nr][nc]!=-1)
+					continue;
+				cost[nr][nc]=cost[r][c]+1;
+				if(nr==tr && nc==tc)
+					return cost[nr][nc];
+				q.add(nr);
+				q.add(nc);
 			}
 		}
-		return -1;
+		return cost[tr][tc];
 	}
 	public static void main (String[] args) throws java.lang.Exception
 	{
 		Scanner in=new Scanner(System.in);
-		while(in.hasNextInt()){
-			A=in.nextInt();
-			B=in.nextInt();
-			n=in.nextInt();
-			BFS();
+		while(in.hasNext()){
+			String src=in.next();
+			String dest=in.next();
+			int sr=src.charAt(0)-'a';
+			int sc=src.charAt(1)-'1';
+			int tr=dest.charAt(0)-'a';
+			int tc=dest.charAt(1)-'1';
+			System.out.println("To get from "+src+" to "+dest+" takes "+BFS(sr,sc,tr,tc)+" knight moves.");
 		}
 	}
 }
